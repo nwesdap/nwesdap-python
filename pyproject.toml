@@ -12,6 +12,7 @@ dependencies = [
 dev = [
     "ipykernel>=7.4.0",
     "matplotlib>=3.11.2",
+    "openpyxl>=3.1.5",
     "pyarrow>=26.0.0",
 ]
 
@@ -32,6 +33,7 @@ norecursedirs = [
     "build",
     "dist",
     "nwesdap",
+    "zenodo",
 ]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
