@@ -3,7 +3,7 @@ name = "nwesdap"
 version = "0.1.0"
 description = "NWESDAP download and import tool for Python"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "pandas>=3.0.6",
 ]
