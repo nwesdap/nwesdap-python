@@ -1,0 +1,37 @@
+[project]
+name = "nwesdap"
+version = "0.1.0"
+description = "NWESDAP download and import tool for Python"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "pandas>=3.0.6",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "matplotlib>=3.11.2",
+    "pyarrow>=26.0.0",
+]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-single-line = false
+lines-after-imports = 2
+known-first-party = ["nwesdap"]
+
+[tool.pytest]
+minversion = "9.0"
+norecursedirs = [
+    ".*",
+    "*.egg*",
+    "build",
+    "dist",
+    "nwesdap",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
