@@ -11,4 +11,4 @@ def test_get_nwesdap():
     assert isinstance(df, pd.DataFrame)
 
 
-test_get_nwesdap()
+# test_get_nwesdap()
