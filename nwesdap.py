@@ -1,4 +1,30 @@
-# %%
+"""
+NWESDAP
+=======
+Download Northwest European Shelf Data Analysis Product (NWESDAP)
+datasets and import them as pandas DataFrames.  For more general info
+on NWESDAP, see https://nwesdap.net.
+
+The only function you need is `get_nwesdap`:
+
+  >>> from nwesdap import get_nwesdap
+  >>> df = get_nwesdap()
+
+This function does the following:
+
+  1. Checks if the latest version of the NWESDAP dataset is already
+     present at "~/.nwesdap".
+  2. If not, downloads it from Zenodo and checks the MD5 checksum,
+     before saving it to "~/.nwesdap".
+  3. Reads in the dataset as a pandas DataFrame.
+
+NOTE: the dataset is downloaded in parquet format, so you will also need
+to install either pyarrow or fastparquet.
+
+See the function docstring for more information on the contents of the
+imported DataFrame.
+"""
+
 import os
 from pathlib import Path
 
@@ -130,10 +156,87 @@ def _get_renamer_glodap(df):
 
 
 def get_nwesdap(
-    version=None,
+    version="v1.2026",
     path_nwesdap=None,
     rename_like_glodap=True,
 ):
+    """Read in the NWESDAP dataset, first downloading it if it's not
+    already stored locally at `path_nwesdap`.
+
+    Parameters
+    ----------
+    version : str, optional
+        Which version of NWESDAP to open, by default "v1.2026",
+        which is currently the only option.
+    path_nwesdap : str or pathlib.Path, optional
+        The path to look for and/or save the NWESDAP data file,
+        by default None, in which case "~/.nwesdap" is used,
+        where "~" is the output from `pathlib.Path.home()`.
+    rename_like_glodap : bool, optional
+        Whether to rename the columns to be similar to the GLODAP names,
+        by default True.
+
+    Returns
+    -------
+    pd.DataFrame
+        The NWESDAP dataset, with the following columns (assuming that
+        `rename_like_glodap` is True, otherwise, the column names will
+        be as described in the NWESDAP manuscript):
+            dataset_origin      | Source for this subset of the data
+            name_id             | Text ID for this QCU
+            unit_id             | Numerical ID for this QCU
+            expocode            | Expedition code
+            cruise_id           | ID for this cruise
+            ship                | Sampling vessel
+            station_id          | ID for this sampling station
+            cast                | CTD cast number
+            bottle_id           | ID for this dataset row
+            year                | Year (UTC)
+            month               | Month (UTC)
+            day                 | Day (UTC)
+            time_utc            | Time (UTC)
+            datetime            | Date and time (UTC)
+            datenum             | Time since 1 January 1970 00:00 UTC in days
+            latitude            | Latitude in decimal °N
+            longitude           | Longitude in decimal °E
+            bottomdepth         | Seafloor depth in m
+            maxsampdepth        | Maximum sample depth at this station in m
+            distance_to_shore   | Distance to coastline in km
+            pressure            | Hydrostatic pressure in dbar
+            depth               | Depth in m
+            temperature         | Temperature in °C
+            theta               | Potential temperature in °C
+            salinity            | Practical salinity
+            abssalinity         | Absolute salininy in g/kg
+            tco2                | Dissolved inorganic carbon in μmol/kg
+            talk                | Total alkalinity in μmol/kg
+            phtsmeastp          | pH on the total scale at measurement conditions
+            phtsinsitutp        | pH on the total scale at insitu T & P
+            ph_tmp              | Temperature of phtsmeastp in °C
+            oxygen_ctd          | Dissolved oxygen from a CTD sensor in μmol/kg
+            oxygen_bottle       | Dissolved oxygen from bottle samples in μmol/kg
+            oxygen              | Recommended dissolved oxygen in μmol/kg
+            aou                 | Apparent oxygen utilisation in μmol/kg
+            nitrate             | Nitrate in μmol/kg
+            nitrite             | Nitrite in μmol/kg
+            nitrate_and_nitrite | Nitrate + nitrite in μmol/kg
+            ammonia             | Total ammonia in μmol/kg
+            phosphate           | Total phosphate in μmol/kg
+            silicate            | Total silicate in μmol/kg
+        There are also columns with the following formats:
+            *_flagPI   | Flags assigned by the original sub-dataset PIs
+            *_qc       | Datapoint-level flags assigned by NWESDAP
+                       |     0 = good
+                       |     1 = flagged not good by original PI
+                       |     2 = suspicious from NWESDAP primary QC
+                       |     3 = suspicious from NWESDAP secondary QC
+                       |     9 = absent
+            *_flag_qcu | QCU-level flags assigned by NWESDAP
+                       |     C = climate quality (GOA-ON)
+                       |     W = weather quality (GOA-ON)
+                       |     X = less than weather quality
+                       |     Z = absent
+    """
     path_nwesdap = _parse_path_nwesdap(path_nwesdap)
     version = _parse_version(version)
     if not os.path.isdir(path_nwesdap) or filenames[version] not in os.listdir(
