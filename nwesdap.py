@@ -7,6 +7,8 @@ import pandas as pd
 import pooch
 
 
+__version__ = "0.1.0"
+
 urls = {
     "v1.2026": "https://zenodo.org/records/23495661/files/NWESDAP_v19102026.parquet?download=1"
 }
