@@ -5,8 +5,8 @@ description = "NWESDAP download and import tool for Python"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "pandas>=3.0.6",
-    "pooch>=1.9.0",
+    "pandas>=3.0.6,<4",
+    "pooch>=1.9.0,<2",
 ]
 
 [dependency-groups]
