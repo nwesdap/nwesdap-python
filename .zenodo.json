@@ -1,0 +1,11 @@
+{
+    "title": "NWESDAP download and import tool for Python", 
+    "license": "GPL-3.0-only", 
+    "creators": [
+        {
+            "affiliation": "NIOZ Royal Netherlands Institute for Sea Research, Texel, the Netherlands", 
+            "name": "Humphreys, Matthew P.",
+            "orcid": "0000-0002-9371-7128"
+        }
+    ]
+}
