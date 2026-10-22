@@ -33,16 +33,19 @@ import pandas as pd
 import pooch
 
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 urls = {
-    "v1.2026": "https://zenodo.org/records/23495661/files/NWESDAP_v19102026.parquet?download=1"
+    "v1.2026rc1": "https://zenodo.org/records/23495661/files/NWESDAP_v19102026.parquet?download=1",
+    "v1.2026rc2": "https://zenodo.org/records/23555137/files/NWESDAP_v20102026.parquet?download=1",
 }
 filenames = {
-    "v1.2026": "NWESDAP_v19102026.parquet",
+    "v1.2026rc1": "NWESDAP_v1_2026rc1.parquet",
+    "v1.2026rc2": "NWESDAP_v1_2026rc2.parquet",
 }
 checksums = {
-    "v1.2026": "md5:b4aebd82e60ff31a465f9a14a31dd54c",
+    "v1.2026rc1": "md5:b4aebd82e60ff31a465f9a14a31dd54c",
+    "v1.2026rc2": "md5:4d9d600821c94c238b361ae992daa98e",
 }
 
 
@@ -63,7 +66,7 @@ def _parse_path_nwesdap(path_nwesdap):
 
 def _parse_version(version):
     if version is None:
-        return "v1.2026"
+        return "v1.2026rc2"
     else:
         if version not in urls:
             raise NwesdapError(f"Version '{version}' not recognised")
@@ -71,18 +74,18 @@ def _parse_version(version):
 
 
 def _download(version=None, path_nwesdap=None):
-    """Download a NWESDAP data file and save it locally, after checking that it
-    has the expected checksum (MD5).
+    """Download a NWESDAP data file and save it locally, after checking
+    that it has the expected checksum (MD5).
 
     Parameters
     ----------
     version : str or None, optional
-        Which NWESDAP version to download, by default `None`, in which case the
-        most recent version is downloaded.  The options are:
-            "v1.2026" (the original NWESDAP).
+        Which NWESDAP version to download, by default `None`, in which
+        case the most recent version is downloaded.  The options are:
+            "v1.2026rc1", "v1.2026rc2".
     path_nwesdap : str or None, optional
-        Where to save the downloaded file, by default `None`, in which case the
-        file is saved at "~/.nwesdap".
+        Where to save the downloaded file, by default `None`, in which
+        case the file is saved at "~/.nwesdap".
     """
     path_nwesdap = _parse_path_nwesdap(path_nwesdap)
     if not os.path.isdir(path_nwesdap):
@@ -156,18 +159,18 @@ def _get_renamer_glodap(df):
 
 
 def get_nwesdap(
-    version="v1.2026",
+    version="v1.2026rc2",
     path_nwesdap=None,
     rename_like_glodap=True,
 ):
     """Read in the NWESDAP dataset, first downloading it if it's not
-    already stored locally at `path_nwesdap`.
+    already stored locally.
 
     Parameters
     ----------
     version : str, optional
-        Which version of NWESDAP to open, by default "v1.2026",
-        which is currently the only option.
+        Which version of NWESDAP to open, by default "v1.2026rc2".
+        Options are: "v1.2026rc1", "v1.2026rc2".
     path_nwesdap : str or pathlib.Path, optional
         The path to look for and/or save the NWESDAP data file,
         by default None, in which case "~/.nwesdap" is used,
