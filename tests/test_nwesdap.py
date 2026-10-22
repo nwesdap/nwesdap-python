@@ -23,5 +23,12 @@ def test_urls_filenames_checksums():
         assert c in nwesdap.filenames
 
 
+def test_all_versions():
+    for v in nwesdap.urls:
+        df = nwesdap.get_nwesdap(version=v)
+        assert isinstance(df, pd.DataFrame)
+
+
 # test_get_nwesdap()
 # test_urls_filenames_checksums()
+# test_all_versions()
